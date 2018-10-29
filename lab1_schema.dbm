@@ -14,7 +14,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="game" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="520" y="180"/>
+	<position x="180" y="440"/>
 	<column name="id" not-null="true"
 	 identity-type="ALWAYS">
 		<type name="smallint" length="0"/>
@@ -54,7 +54,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="DLC" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1000" y="440"/>
+	<position x="740" y="820"/>
 	<column name="id" not-null="true">
 		<type name="smallint" length="0"/>
 	</column>
@@ -93,32 +93,35 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="system_requirements" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1000" y="60"/>
+	<position x="640" y="220"/>
 	<column name="OS" not-null="true">
 		<type name="varchar" length="64"/>
-	</column>
-	<column name="CPU">
-		<type name="varchar" length="32"/>
-	</column>
-	<column name="GPU">
-		<type name="varchar" length="32"/>
 	</column>
 	<column name="memory_space" not-null="true"
 	 identity-type="ALWAYS">
 		<type name="smallint" length="0"/>
 	</column>
-	<column name="software">
+	<column name="preinstalled_software">
 		<type name="text" length="0"/>
 	</column>
 	<constraint name="system_requirements_pk" type="pk-constr" table="public.system_requirements">
 		<columns names="OS" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_game" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="game_fk" index="1"/>
+		<object name="system_requirements_uq" index="2"/>
+	</customidxs>
 </table>
 
 <table name="developer" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1000" y="300"/>
+	<position x="740" y="500"/>
 	<column name="id" not-null="true">
 		<type name="varchar" length="64"/>
 	</column>
@@ -140,7 +143,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="OS" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1500" y="280"/>
+	<position x="1680" y="420"/>
 	<column name="id" not-null="true">
 		<type name="varchar" length="64"/>
 	</column>
@@ -159,7 +162,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="CPU" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1500" y="60"/>
+	<position x="1680" y="160"/>
 	<column name="manufacturer" not-null="true">
 		<type name="varchar" length="32"/>
 	</column>
@@ -185,7 +188,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="GPU" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1520" y="540"/>
+	<position x="1680" y="720"/>
 	<column name="manufacturer" not-null="true">
 		<type name="varchar" length="32"/>
 	</column>
@@ -219,31 +222,130 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.game"
 	 src-required="true" dst-required="false"/>
 
-<relationship name="system_requirements_has_one_CPU" type="rel11"
+<table name="minimal_requirements" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1100" y="20"/>
+	<column name="id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="minimal_requirements_pk" type="pk-constr" table="public.minimal_requirements">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_OS" index="2"/>
+		<object name="manufacturer_CPU" index="1"/>
+		<object name="manufacturer_GPU" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="CPU_fk" index="0"/>
+		<object name="GPU_fk" index="4"/>
+		<object name="OS_fk" index="2"/>
+		<object name="minimal_requirements_uq" index="1"/>
+		<object name="minimal_requirements_uq1" index="3"/>
+		<object name="minimal_requirements_uq2" index="5"/>
+	</customidxs>
+</table>
+
+<table name="optimal_requirements" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1100" y="420"/>
+	<column name="id" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="optimal_requirements_pk" type="pk-constr" table="public.optimal_requirements">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_OS" index="2"/>
+		<object name="manufacturer_CPU" index="3"/>
+		<object name="manufacturer_GPU" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="CPU_fk" index="4"/>
+		<object name="GPU_fk" index="0"/>
+		<object name="OS_fk" index="2"/>
+		<object name="optimal_requirements_uq" index="1"/>
+		<object name="optimal_requirements_uq1" index="3"/>
+		<object name="optimal_requirements_uq2" index="5"/>
+	</customidxs>
+</table>
+
+<relationship name="minimal_requirements_has_one_CPU" type="rel11"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#1a2a53"
+	 custom-color="#633aea"
 	 src-table="public.&quot;CPU&quot;"
+	 dst-table="public.minimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="minimal_requirements_has_one_OS" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#eee206"
+	 src-table="public.&quot;OS&quot;"
+	 dst-table="public.minimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="minimal_requirements_has_one_GPU" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2d27ed"
+	 src-table="public.&quot;GPU&quot;"
+	 dst-table="public.minimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="optimal_requirements_has_one_GPU" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#ff6386"
+	 src-table="public.&quot;GPU&quot;"
+	 dst-table="public.optimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="optimal_requirements_has_one_OS" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#de4b46"
+	 src-table="public.&quot;OS&quot;"
+	 dst-table="public.optimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="optimal_requirements_has_one_CPU" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#d7b268"
+	 src-table="public.&quot;CPU&quot;"
+	 dst-table="public.optimal_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="system_requirements_has_one_minimal_requirements" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#52512c"
+	 src-table="public.minimal_requirements"
 	 dst-table="public.system_requirements"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="system_requirements_has_many_OS" type="rel1n"
+<relationship name="system_requirements_has_one_optimal_requirements" type="rel11"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#f56186"
-	 src-table="public.system_requirements"
-	 dst-table="public.&quot;OS&quot;"
-	 src-required="false" dst-required="false"/>
-
-<relationship name="system_requirements_has_many_GPU" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#3d6864"
-	 src-table="public.system_requirements"
-	 dst-table="public.&quot;GPU&quot;"
+	 custom-color="#7865c4"
+	 src-table="public.optimal_requirements"
+	 dst-table="public.system_requirements"
 	 src-required="false" dst-required="false"/>
 
 </dbmodel>
