@@ -1,0 +1,13 @@
+*.aux
+*.toc
+*.lof
+*.lot
+*.lol
+*.out
+*.gz
+*.log
+*.dvi
+.idea
+target
+*.iml
+*.properties
