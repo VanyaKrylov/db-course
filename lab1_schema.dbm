@@ -43,8 +43,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_developer1" index="8"/>
-		<object name="id_system_requirements1" index="7"/>
+		<object name="id_developer" index="8"/>
+		<object name="id_system_requirements" index="7"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -61,6 +61,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<position x="740" y="820"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="64"/>
 	</column>
 	<column name="price" not-null="true"
 	 identity-type="ALWAYS">
@@ -121,10 +124,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="name" not-null="true">
 		<type name="varchar" length="64"/>
 	</column>
-	<column name="rating" not-null="true"
-	 identity-type="ALWAYS">
-		<type name="smallint" length="0"/>
-	</column>
 	<column name="year_of_foundation">
 		<type name="smallint" length="0"/>
 	</column>
@@ -176,7 +175,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 	</column>
 	<column name="frequency">
-		<type name="smallint" length="0"/>
+		<type name="float" length="0"/>
 	</column>
 	<column name="RAM" not-null="true"
 	 identity-type="ALWAYS">
@@ -221,9 +220,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_CPU" index="1"/>
+		<object name="id_CPU" index="2"/>
 		<object name="id_GPU" index="3"/>
-		<object name="id_OS" index="2"/>
+		<object name="id_OS" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -249,8 +248,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 	<customidxs object-type="column">
 		<object name="id_CPU" index="3"/>
-		<object name="id_GPU" index="1"/>
-		<object name="id_OS" index="2"/>
+		<object name="id_GPU" index="2"/>
+		<object name="id_OS" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -357,9 +356,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 custom-color="#f99f9a"
-	 src-table="public.game"
-	 dst-table="public.&quot;DLC&quot;"
+	 custom-color="#029eb8"
+	 src-table="public.&quot;DLC&quot;"
+	 dst-table="public.game"
 	 src-required="false" dst-required="false"/>
 
 </dbmodel>
