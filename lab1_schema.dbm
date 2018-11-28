@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.2-alpha" last-position="183,0" last-zoom="1"
+<dbmodel pgmodeler-ver="0.9.2-alpha" last-position="172,0" last-zoom="1"
 	 default-schema="public" default-owner="postgres">
 <database name="new_database" is-template="false" allow-conns="true">
 </database>
@@ -15,9 +15,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="180" y="440"/>
-	<column name="id" not-null="true"
-	 identity-type="ALWAYS">
-		<type name="smallint" length="0"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="name">
+		<type name="text" length="0"/>
 	</column>
 	<column name="price" not-null="true"
 	 identity-type="ALWAYS">
@@ -32,23 +34,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="language">
 		<type name="text" length="0"/>
 	</column>
-	<column name="id_developer">
-		<type name="varchar" length="64"/>
-	</column>
 	<column name="id_PEGI_rating" not-null="true"
-	 identity-type="ALWAYS">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="id_DLC">
-		<type name="varchar" length="64"/>
-	</column>
-	<column name="id_system_requirements" not-null="true"
 	 identity-type="ALWAYS">
 		<type name="smallint" length="0"/>
 	</column>
 	<constraint name="game_pk" type="pk-constr" table="public.game">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_developer1" index="8"/>
+		<object name="id_system_requirements1" index="7"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="developer_fk" index="3"/>
+		<object name="game_uq" index="2"/>
+		<object name="game_uq1" index="4"/>
+		<object name="system_requirements_fk" index="1"/>
+	</customidxs>
 </table>
 
 <table name="DLC" hide-ext-attribs="true">
@@ -56,7 +60,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<position x="740" y="820"/>
 	<column name="id" not-null="true">
-		<type name="smallint" length="0"/>
+		<type name="serial" length="0"/>
 	</column>
 	<column name="price" not-null="true"
 	 identity-type="ALWAYS">
@@ -71,30 +75,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="DLC_pk" type="pk-constr" table="public.&quot;DLC&quot;">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_game" index="4"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="game_fk" index="1"/>
-	</customidxs>
 </table>
-
-<relationship name="game_has_many_DLC" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#b739e8"
-	 src-table="public.game"
-	 dst-table="public.&quot;DLC&quot;"
-	 src-required="false" dst-required="false"/>
 
 <table name="system_requirements" hide-ext-attribs="true">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="640" y="220"/>
-	<column name="OS" not-null="true">
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="OS">
 		<type name="varchar" length="64"/>
 	</column>
 	<column name="memory_space" not-null="true"
@@ -105,16 +95,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 	</column>
 	<constraint name="system_requirements_pk" type="pk-constr" table="public.system_requirements">
-		<columns names="OS" ref-type="src-columns"/>
+		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_game" index="3"/>
+		<object name="id_minimal_requirements" index="4"/>
+		<object name="id_optimal_requirements" index="5"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="game_fk" index="1"/>
-		<object name="system_requirements_uq" index="2"/>
+		<object name="minimal_requirements_fk" index="1"/>
+		<object name="optimal_requirements_fk" index="3"/>
+		<object name="system_requirements_uq" index="0"/>
+		<object name="system_requirements_uq1" index="2"/>
 	</customidxs>
 </table>
 
@@ -123,6 +116,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<position x="740" y="500"/>
 	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="name" not-null="true">
 		<type name="varchar" length="64"/>
 	</column>
 	<column name="rating" not-null="true"
@@ -145,7 +141,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<position x="1680" y="420"/>
 	<column name="id" not-null="true">
-		<type name="varchar" length="64"/>
+		<type name="serial" length="0"/>
+	</column>
+	<column name="manufacturer">
+		<type name="varchar" length="32"/>
 	</column>
 	<column name="version">
 		<type name="varchar" length="32"/>
@@ -163,7 +162,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1680" y="160"/>
-	<column name="manufacturer" not-null="true">
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="manufacturer">
 		<type name="varchar" length="32"/>
 	</column>
 	<column name="model">
@@ -181,7 +183,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 	</column>
 	<constraint name="CPU_pk" type="pk-constr" table="public.&quot;CPU&quot;">
-		<columns names="manufacturer" ref-type="src-columns"/>
+		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -189,7 +191,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1680" y="720"/>
-	<column name="manufacturer" not-null="true">
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="manufacturer">
 		<type name="varchar" length="32"/>
 	</column>
 	<column name="model">
@@ -200,27 +205,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 	</column>
 	<constraint name="GPU_pk" type="pk-constr" table="public.&quot;GPU&quot;">
-		<columns names="manufacturer" ref-type="src-columns"/>
+		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
-
-<relationship name="system_requirements_has_one_game" type="rel11"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#18a9c3"
-	 src-table="public.game"
-	 dst-table="public.system_requirements"
-	 src-required="false" dst-required="false"/>
-
-<relationship name="developer_has_many_game" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#e556a9"
-	 src-table="public.developer"
-	 dst-table="public.game"
-	 src-required="true" dst-required="false"/>
 
 <table name="minimal_requirements" hide-ext-attribs="true">
 	<schema name="public"/>
@@ -234,9 +221,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
+		<object name="id_CPU" index="1"/>
+		<object name="id_GPU" index="3"/>
 		<object name="id_OS" index="2"/>
-		<object name="manufacturer_CPU" index="1"/>
-		<object name="manufacturer_GPU" index="3"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -254,16 +241,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<position x="1100" y="420"/>
 	<column name="id" not-null="true">
-		<type name="smallint" length="0"/>
+		<type name="serial" length="0"/>
 	</column>
 	<constraint name="optimal_requirements_pk" type="pk-constr" table="public.optimal_requirements">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 
 	<customidxs object-type="column">
+		<object name="id_CPU" index="3"/>
+		<object name="id_GPU" index="1"/>
 		<object name="id_OS" index="2"/>
-		<object name="manufacturer_CPU" index="3"/>
-		<object name="manufacturer_GPU" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -346,6 +333,33 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#7865c4"
 	 src-table="public.optimal_requirements"
 	 dst-table="public.system_requirements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="game_has_one_system_requirements" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#61cbc9"
+	 src-table="public.system_requirements"
+	 dst-table="public.game"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="game_has_one_developer" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#a5ed1e"
+	 src-table="public.developer"
+	 dst-table="public.game"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="game_has_many_DLC" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f99f9a"
+	 src-table="public.game"
+	 dst-table="public.&quot;DLC&quot;"
 	 src-required="false" dst-required="false"/>
 
 </dbmodel>
