@@ -1,8 +1,8 @@
 INSERT INTO game
-VALUES (DEFAULT, 'Red Dead Redemption', 1999, '01-01-2018', 8, 'english', 18, 1, 1, 1);
+VALUES (DEFAULT, 'Red Dead Redemption', 1999, '01-01-2018', 8, 'english', 18, 1, 1, 1, 1);
 
 INSERT INTO system_requirements
-VALUES (DEFAULT, 'Windows', 73, 'DirectX 13', 1, 1);
+VALUES (DEFAULT, 'Windows', 73, 1, 1, 1);
 
 INSERT INTO developer
 VALUES (DEFAULT, 'rockstar games' , '1990', 'rockstargames.com');
@@ -26,3 +26,9 @@ VALUES (DEFAULT, 'Windows', '7', 64);
 INSERT INTO GPU
 VALUES (DEFAULT, 'Nvidia', 'GeForce GTX1080', 2),
        (DEFAULT, 'Nvidia', 'RTX 2070', 8);
+
+INSERT INTO preinstalled_software
+VALUES (DEFAULT, 'DirectX 13', 'https://www.microsoft.com/en-us/download/details.aspx?id=35', 'Follow the instructions of install master');
+
+INSERT INTO tournament
+VALUES (DEFAULT, 'Cowboy ride', '[2018-12-31 22:00, 2019-03-01 22:00]', , 0);
