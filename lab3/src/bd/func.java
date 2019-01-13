@@ -34,7 +34,7 @@ public class func {
 
             String manuf, os, versionn, manufactures, modell, name_DLC, release_date= " ",per= " ", download_link, name_pr, name_t, period= " " ,datefr= " " ,dateto= " ", 
                     description, manufacturer, model, website, name_dev, name_game, language, date= " " , date2= " ", instructions, OS, rules;
-            int cores, RAM, price, memory, bits, year_of_foundation, id_tournament_fk, id_dev_fk, id_DLC_fk,prize,
+            int cores, RAM, price, memory, bits, year_of_foundation, id_tournament_fk, id_dev_fk, id_game_fk,prize,
                     id_sys_fk, id_peg_fk, rating, price_game, id_OS_fk, id_CPU_fk, id_GPU_fk, id_mr_fk, id_or_fk, id_ps_fk, memoryy;
             //boolean paid;
             int frequency; 
@@ -115,7 +115,7 @@ public class func {
             
             
             //--------------- DLC ---------------
-              st = conn.createStatement();
+            /*  st = conn.createStatement();
             for (int i = 0; i < param.size_for_DLC; i++) {
                 name_DLC = gen.generateString(1, 15); 
                 release_date= gen.generateDate("1940-01-01", "2018-11-11");
@@ -132,7 +132,7 @@ public class func {
             while (rs.next())
                 tablesID.get("id_dlc").add(rs.getInt("id_dlc"));
             rs.close();
-            st.close();  
+            st.close();  */
             
             //--------------- CPU table generating ---------------
             st = conn.createStatement();
@@ -292,17 +292,17 @@ public class func {
                 id_dev_fk = (int)((Math.random() * tablesID.get("id_developer").size()) + 1);
                 id_sys_fk = (int)((Math.random() * tablesID.get("id_system_requirements").size()) + 1);
                 id_tournament_fk = (int)((Math.random() * tablesID.get("id_tournament").size()) + 1);
-                id_DLC_fk = (int)((Math.random() * tablesID.get("id_DLC").size()) + 1);
+                //id_DLC_fk = (int)((Math.random() * tablesID.get("id_DLC").size()) + 1);
                 rating = gen.generateInt(1,10);
                 date = gen.generateDate("1940-01-01", "2018-11-11");
-              
+
                 price_game = gen.generateInt(1,10);
               
                 
                 
-                sql = "INSERT INTO game (name, price, release_date,rating, language,PEGI_rating,id_system_requirements, id_developer, id_DLC, id_tournament)" 
+                sql = "INSERT INTO game (name, price, release_date,rating, language,PEGI_rating,id_system_requirements, id_developer, id_tournament)"
                         + " VALUES ('"
-                        + name_game + "','" + price_game + "','" + date + "','" + rating + "','" + language + "','" + id_peg_fk + "','" + id_sys_fk + "','" + id_dev_fk + "','" + id_DLC_fk +"','" + id_tournament_fk +"');";
+                        + name_game + "','" + price_game + "','" + date + "','" + rating + "','" + language + "','" + id_peg_fk + "','" + id_sys_fk + "','" + id_dev_fk + "','" + id_tournament_fk +"');";
                 st.executeUpdate(sql);
             }
 
@@ -316,7 +316,27 @@ public class func {
                 tablesID.get("id_game").add(rs.getInt("id_game"));
             rs.close();
             st.close();
-            
+
+            //--------------- DLC ---------------
+            st = conn.createStatement();
+            for (int i = 0; i < param.size_for_DLC; i++) {
+                name_DLC = gen.generateString(1, 15);
+                release_date= gen.generateDate("1940-01-01", "2018-11-11");
+                price= gen.generateInt(1, 15);
+                description= gen.generateString(1, 15);
+                id_game_fk = (int)((Math.random() * tablesID.get("id_game").size()) + 1);
+                sql = "INSERT INTO DLC (name, price, release_date, description, id_game) VALUES ('" + name_DLC + "','" +price+ "','" +release_date+ "','" +description+ "','" +id_game_fk+ "');";
+                st.executeUpdate(sql);
+            }
+            st.close();
+
+            //--------------- DLC table primary keys  ---------------
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT id_dlc FROM DLC;");
+            while (rs.next())
+                tablesID.get("id_dlc").add(rs.getInt("id_dlc"));
+            rs.close();
+            st.close();
             
             
         } catch (SQLException e) {
