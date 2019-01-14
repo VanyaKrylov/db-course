@@ -1,0 +1,222 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{chngcntr}
+\usepackage{pgfplots}
+\usepackage{amsfonts}
+\usepackage{hhline}
+\usepackage{pgfplotstable}
+\usepackage{multirow}
+\usepackage{tikz,xcolor}
+\usepackage{listingsutf8}
+\usepackage{textcomp}
+\usepackage{hyperref}
+
+
+\lstset{
+	language={SQL},
+	backgroundcolor=\color{white},
+	commentstyle=\color{blue},
+	keywordstyle=\color{blue},
+	numberstyle=\scriptsize\color{gray},
+	stringstyle=\color{purple},
+	basicstyle=\ttfamily\small,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=4,
+	texcl=true,
+	extendedchars=false,
+	frame=single,
+	morekeywords={IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES},
+	inputencoding=utf8/cp1251
+}
+
+\titleformat{\section}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesection\hspace{0.6em}}
+  
+  
+\titleformat{\subsection}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesubsection\hspace{0.6em}}
+  
+\titleformat{\subsubsection}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesubsubsection\hspace{0.6em}}
+
+%\linespread{1.3} % полуторный интервал
+%\renewcommand{\rmdefault}{ftm} % Times New Roman
+
+\counterwithin{figure}{section}
+\counterwithin{equation}{section}
+\counterwithin{table}{section}
+
+\begin{document}
+\begin{titlepage}
+\centering
+Санкт-Петербургский политехнический университет Петра Великого \\
+Институт компьютерных наук и технологий \\
+Кафедра компьютерных систем и программных технологий \\
+\vspace{5.5cm}
+
+{\centering \textbf{Отчёт по лабораторной работе} \\ 
+\vspace{0.15cm}
+\textbf{Дисциплина}: Базы данных \\
+\vspace{0.15cm}
+\textbf{Тема}: Язык SQL-DML} \\
+
+\vspace{5.5cm}
+
+\begin{table}[H]
+\begin{tabular}{p{\textwidth}@{}r}
+{Выполнил студент гр. 43501/3} \hfill 
+\vspace{0.2cm}
+Крылов И.С. \\ \hfill
+\vspace{0.2cm}
+
+Преподаватель \hfill 
+\vspace{0.2cm}
+Мяснов А.В \\ \hfill 
+\vspace{0.2cm}
+
+{} \hfill { <<\underline{\hspace{0.08\textwidth}}>> \underline{\hspace{0.2\textwidth}}2018 г.} \\
+\end{tabular}
+\end{table}
+\vfill
+{\centering Санкт-Петербург \\ 
+\vspace{0.15cm}
+2018}
+\end{titlepage}
+
+\section{Цель работы.}
+Познакомитьсяс языком создания запросов управления данными SQL-DML.
+
+\section{Программа работы}
+\begin{enumerate}
+\item Изучение SQL-DML.
+\item Выполнение всех запросов из списка стандартных запросов. Демонстрация результатов преподавателю.
+\item Получение у преподавателя и реализация SQL-запросов в соответствии с индивидуальным заданием. Демонстрация результатов преподавателю.
+\item Сохранение в БД выполненных запросов SELECT в виде представлений, запросов INSERT, UPDATE или DELETE -- в виде ХП. Выкладывание скрипта в GitLab.
+\end{enumerate}
+
+\section{Список стандартных запросов}
+\begin{itemize}
+\item Сделайте выборку всех данных из каждой таблицы
+\item Сделайте выборку данных из одной таблицы при нескольких условиях, с использованием логических операций, LIKE, BETWEEN, IN (не менее 3-х разных примеров)
+\item Создайте в запросе вычисляемое поле
+\item Сделайте выборку всех данных с сортировкой по нескольким полям
+\item Создайте запрос, вычисляющий несколько совокупных характеристик таблиц
+\item Сделайте выборку данных из связанных таблиц (не менее двух примеров)
+\item Создайте запрос, рассчитывающий совокупную характеристику с использованием группировки, наложите ограничение на результат группировки
+\item Придумайте и реализуйте пример использования вложенного запроса
+\item С помощью оператора INSERT добавьте в каждую таблицу по одной записи
+\item С помощью оператора UPDATE измените значения нескольких полей у всех записей, отвечающих заданному условию
+\item С помощью оператора DELETE удалите запись, имеющую максимальное (минимальное) значение некоторой совокупной характеристики
+\item С помощью оператора DELETE удалите записи в главной таблице, на которые не ссылается подчиненная таблица (используя вложенный запрос)
+\end{itemize}
+
+\section{Ход работы}
+
+База была заполненна тестовыми данными с помощью генератора.
+В базе было около 500 авторов, жанров, издателей, серий. 307660 комментариев. 5000 книг. 310210 заказов. 300 полок. 100 магазинов. 500 пользователей и их сессий.
+
+\subsection{Выполнение стандартных запросов}
+
+Для того, чтобы сделать выборку всех данных из каждой таблицы воспользуемся скриптом:
+\lstinputlisting{../sql/db1.sql}
+
+Получим данные из таблиц $developer$ и $tournament$ при нескольких условиях, с использованием логических операций, LIKE, BETWEEN, IN:
+\lstinputlisting{../sql/db2.sql}
+
+Используем в запросе вычисляемое поле, чтобы определить сколько турниров с призом = 4:
+\lstinputlisting{../sql/db3.sql}
+
+Организуем выборку данных с сотрировкой по нескольким полям.
+Сортировать данные будем из таблицы $tournament$ по полям $tournament\_name$ и $tournament\_xprize$:
+\lstinputlisting{../sql/db4.sql}
+Таким образом получим турниры по убыванию призового фонда.
+
+Для вычисления совокупных характеристик таблицы разработаем sql-скрипт:
+\lstinputlisting{../sql/db5.sql}
+
+Сделаем выборку данных из связаных таблиц.
+\lstinputlisting{../sql/db6.sql}
+
+Выведем память gpu по возрастанию частоты значения в БД:
+\lstinputlisting{../sql/db7.sql}
+
+Вложенный запрос, который выводит 64 разрядные системы и процессоры с ОП 2Гб :
+\lstinputlisting{../sql/db8.sql}
+
+Был разработан скрипт, который добавляет в таблицу по одной записи: 
+\lstinputlisting{../sql/db9.sql}
+
+Создан скрипт, который изменяет значение в базе данных:\\ 
+\lstinputlisting{../sql/db10.sql}
+
+Удалим игру с наибольшей стомостью:
+\lstinputlisting{../sql/db11.sql}
+
+Удалим системные требования, не привязанные к игре:
+\lstinputlisting{../sql/db12.sql}
+
+\section{Запросы по индивидуальному заданию}
+\subsection{Задание}
+Реализовать запросы к БД:
+
+\begin{enumerate}
+\item Вывести процессоры, производительности которых хватает для запуска более половины игр из всего перечня. Производительность процессора измерять как произведение тактовой частоты на количество ядер.
+\item Вывести игры, для которых суммарная стоимость дополнительного контента более, чем в 3 раза превышает стоимость игры.
+\end{enumerate}
+
+\subsection{Процессоры}
+Был разработан sql-скрипт, который выводит процессоры с производительностью больше чем требуется для половины имеющихся игр.
+
+\lstinputlisting{../sql/db14.sql}
+
+Для каждой игры считается необходимая мощность процессора, после чего составляется упорядоченная по требуемой мощности для игры таблица, берётся медианное значение и сравнивается для каждого из процессоров.
+
+
+\subsection{Доп контент}
+Был разработан sql-скрипт.
+
+\lstinputlisting{../sql/db13.sql}
+
+Для каждой игры была посчитана общая сумма дополнительного контента, после чего это значение было сравнено с о стоимостью самой игры.
+
+\section{Представления и хранимые процедуры}
+Из запросов сделаных в предидущих пунктах сформируем представления:
+
+\lstinputlisting{../sql/view.sql}
+
+Оформить запросы на изменение базы данных, как хранимые процедуры не получится. Это связано с тем, что хранимые процедуры  достпуны только начиная с PostgreSQL11. Поэтому будем использовать функции:
+\lstinputlisting{../sql/func.sql}
+
+\section{Вывод}
+В ходе лабораторной работы были улучшены навыки работы с sql-dml и улучшено общее понимание функционирования баз данных. К основным запросам sql-dml относятся SELECT, INSERT, UPDATE, DELETE. В данной работе наиболее подробно рассмотрена работа  с SELECT. В запросов этого типа были установлены различные ограничения, вложенные конструкции, объединения. По результатам использования sql-dml можно сказать, что это мощный инструмент, который позволяет легко и элегантно решить поставленную задачу.
+
+\end{document}
