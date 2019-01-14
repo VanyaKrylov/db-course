@@ -34,3 +34,5 @@
 -- 13 -- select * from game join  (select id_game, SUM(dlc.price) from game join dlc using (id_game) group by id_game) as sub using (id_game);
 
 -- 13 --  with summary as (select id_game as id_g, game.name as g_name, game.price as g_pr, SUM(dlc.price) as summ from game join dlc using (id_game) group by id_game) select id_g, g_name, g_pr, summ from summary where (g_pr < summ * 3);
+
+-- 14 -- select * from cpu where cpu.cores * cpu.frequency > (select mult from (with summary as (select cpu.cores * cpu.frequency as mult from game join system_requirements using (id_system_requirements) join minimal_requirements using (id_minimal_requirements) join cpu using (id_cpu)) select mult, ROW_NUMBER () OVER (order by mult) from summary) x where ROW_NUMBER = (select count(*) from game) / 2 + 1);
