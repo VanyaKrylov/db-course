@@ -35,7 +35,7 @@ public class func {
             String manuf, os, versionn, manufactures, modell, name_DLC, release_date= " ",per= " ", download_link, name_pr, name_t, period= " " ,datefr= " " ,dateto= " ", 
                     description, manufacturer, model, website, name_dev, name_game, language, date= " " , date2= " ", instructions, OS, rules;
             int cores, RAM, price, memory, bits, year_of_foundation, id_tournament_fk, id_dev_fk, id_game_fk,prize,
-                    id_sys_fk, id_peg_fk, rating, price_game, id_OS_fk, id_CPU_fk, id_GPU_fk, id_mr_fk, id_or_fk, id_ps_fk, memoryy;
+                    id_sys_fk, id_peg_fk, rating, price_game, id_OS_fk, id_CPU_fk, id_GPU_fk, id_mr_fk, id_or_fk, id_sr_fk, memoryy;
             //boolean paid;
             int frequency; 
           
@@ -162,30 +162,7 @@ public class func {
             rs.close();
             st.close();  
             
-            
-           //--------------- preinstalled_software table ---------------
-           
-             st = conn.createStatement();
-            for (int i = 0; i < param.size_for_preinstalled_software; i++) {
-                name_pr = gen.generateString(1, 15);
-                download_link = gen.generateString(1, 15);
-                instructions = gen.generateString(1, 15);
-                //System.out.println(name_pr + " " + download_link + " " + instructions);
-                sql = "INSERT INTO preinstalled_software (name,download_link,instructions)" +
-                        " VALUES ('"
-                        + name_pr + "','" +download_link+ "','" +instructions+ "');";
-                st.executeUpdate(sql);
-            }
 
-            st.close();
-           
-            //--------------- preinstalled_software table primary keys ---------------
-            st = conn.createStatement();
-            rs = st.executeQuery("SELECT id_preinstalled_software FROM \"preinstalled_software\";");
-            while (rs.next())
-                tablesID.get("id_preinstalled_software").add(rs.getInt("id_preinstalled_software"));
-            rs.close();
-            st.close(); 
             
             //--------------- GPU table ---------------
             st = conn.createStatement();
@@ -264,11 +241,11 @@ public class func {
                 memoryy = gen.generateInt(1,10);
                 id_mr_fk = (int)(Math.floor(Math.random() * tablesID.get("id_minimal_requirements").size()) + 1);
                 id_or_fk = (int)(Math.floor(Math.random() * tablesID.get("id_optimal_requirements").size()) + 1);                   
-                id_ps_fk = (int)(Math.floor(Math.random() * tablesID.get("id_preinstalled_software").size()) + 1);                   
+                //id_ps_fk = (int)(Math.floor(Math.random() * tablesID.get("id_preinstalled_software").size()) + 1);
                 
                         
-                sql = "INSERT INTO system_requirements( OS, memory_space, id_minimal_requirements, id_optimal_requirements, id_preinstalled_software)" +
-                        " VALUES ('"+ os+ "','" + memoryy + "','" + id_mr_fk +"','" + id_or_fk +"','" + id_ps_fk +  "');";
+                sql = "INSERT INTO system_requirements( OS, memory_space, id_minimal_requirements, id_optimal_requirements)" +
+                        " VALUES ('"+ os+ "','" + memoryy + "','" + id_mr_fk +"','" + id_or_fk +  "');";
                 st.executeUpdate(sql);
                
             }
@@ -281,7 +258,34 @@ public class func {
                 tablesID.get("id_system_requirements").add(rs.getInt("id_system_requirements"));
             rs.close();
             st.close();
-            
+
+
+
+            //--------------- preinstalled_software table ---------------
+
+            st = conn.createStatement();
+            for (int i = 0; i < param.size_for_preinstalled_software; i++) {
+                name_pr = gen.generateString(1, 15);
+                download_link = gen.generateString(1, 15);
+                instructions = gen.generateString(1, 15);
+                id_sr_fk = (int)(Math.floor(Math.random() * tablesID.get("id_system_requirements").size()) + 1);
+                //System.out.println(name_pr + " " + download_link + " " + instructions);
+                sql = "INSERT INTO preinstalled_software (name,download_link,instructions, id_system_requirements)" +
+                        " VALUES ('"
+                        + name_pr + "','" +download_link+ "','" +instructions + "','"+ id_sr_fk +"');";
+                st.executeUpdate(sql);
+            }
+
+            st.close();
+
+            //--------------- preinstalled_software table primary keys ---------------
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT id_preinstalled_software FROM \"preinstalled_software\";");
+            while (rs.next())
+                tablesID.get("id_preinstalled_software").add(rs.getInt("id_preinstalled_software"));
+            rs.close();
+            st.close();
+
             //--------------- game  ---------------
             st = conn.createStatement();
             for (int i = 0; i < param.size_for_developer; i++) {

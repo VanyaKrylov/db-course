@@ -2,7 +2,7 @@ package bd;
 
 public class par {
    static final String DB_DRIVER = "org.postgresql.Driver";
-   static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/game3";
+   static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/game4";
    static final String DB_USER = "postgres";
    static final String DB_PASSWORD = "0000"; //123qwe321
    static final int size_for_CPU = 10;
