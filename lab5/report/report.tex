@@ -1,0 +1,189 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{chngcntr}
+\usepackage{pgfplots}
+\usepackage{amsfonts}
+\usepackage{hhline}
+\usepackage{pgfplotstable}
+\usepackage{multirow}
+\usepackage{tikz,xcolor}
+\usepackage{listingsutf8}
+\usepackage{textcomp}
+\usepackage{hyperref}
+
+
+\lstset{
+	language={SQL},
+	backgroundcolor=\color{white},
+	commentstyle=\color{blue},
+	keywordstyle=\color{blue},
+	numberstyle=\scriptsize\color{gray},
+	stringstyle=\color{purple},
+	basicstyle=\ttfamily\small,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=4,
+	texcl=true,
+	extendedchars=false,
+	frame=single,
+	morekeywords={IF, BIGSERIAL, SERIAL, TEXT, BIGINT, MONEY, BOOLEAN, REFERENCES},
+	inputencoding=utf8/cp1251
+}
+
+\titleformat{\section}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesection\hspace{0.6em}}
+  
+  
+\titleformat{\subsection}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesubsection\hspace{0.6em}}
+  
+\titleformat{\subsubsection}[hang]
+  {\bfseries}
+  {}
+  {0em}
+  {\hspace{-0.4pt}\large \thesubsubsection\hspace{0.6em}}
+
+%\linespread{1.3} % полуторный интервал
+%\renewcommand{\rmdefault}{ftm} % Times New Roman
+
+\counterwithin{figure}{section}
+\counterwithin{equation}{section}
+\counterwithin{table}{section}
+
+\begin{document}
+\begin{titlepage}
+\centering
+Санкт-Петербургский политехнический университет Петра Великого \\
+Институт компьютерных наук и технологий \\
+Кафедра компьютерных систем и программных технологий \\
+\vspace{5.5cm}
+
+{\centering \textbf{Отчёт по лабораторной работе} \\ 
+\vspace{0.15cm}
+\textbf{Дисциплина}: Базы данных \\
+\vspace{0.15cm}
+\textbf{Тема}: SQL программирование, ХП} \\
+
+\vspace{5.5cm}
+
+\begin{table}[H]
+\begin{tabular}{p{\textwidth}@{}r}
+{Выполнили студенты гр. 43501/3} \hfill 
+\vspace{0.2cm}
+Мальцев М.С. \\ \hfill
+\vspace{0.2cm}
+
+Преподаватель \hfill 
+\vspace{0.2cm}
+Мяснов А.В \\ \hfill 
+\vspace{0.2cm}
+
+{} \hfill { <<\underline{\hspace{0.08\textwidth}}>> \underline{\hspace{0.2\textwidth}}2018 г.} \\
+\end{tabular}
+\end{table}
+\vfill
+{\centering Санкт-Петербург \\ 
+\vspace{0.15cm}
+2018}
+\end{titlepage}
+
+\section{Цель работы.}
+Познакомить студентов с возможностями реализации более сложной обработки данных на стороне сервера с помощью хранимых процедур.
+
+\section{Программа работы}
+\begin{enumerate}
+\item Изучение возможностей языка PL/pgSQL.
+\item Создание двух хранимых процедур в соответствии с индивидуальным заданием, полученным у преподавателя.
+\item Выкладывание скрипта с созданными сущностями в репозиторий.
+\item Демонстрация результатов преподавателю.
+\end{enumerate}
+
+\section{Ход работы}
+В соответствии с индивидуальным заданием были разработаны две хранимые процедуры.
+
+База была заполненна тестовыми данными с помощью генератора.
+В базе было около 500 авторов, жанров, издателей, серий. 307660 комментариев. 5000 книг. 310210 заказов. 300 полок. 100 магазинов. 500 пользователей и их сессий.
+
+
+\subsection{Индивидальное задание}
+Реализовать хранимые процедуры:
+\begin{enumerate}
+	\item По каждому жанру вывести статистику продаж за последние 5 лет с абсолютным (в количестве шутк) и относительным (в \%) изменением продаж книг.
+	\item Для всех книг заданного автора вывести количество продаж и количество комментариев помесячно, изменение относительно предыдущего месяца за первые 12 месяцев с момента первого заказа книги.
+\end{enumerate}
+
+\subsection{Вывод статистики продаж}
+Был разработан скрипт, содержащий функцию,
+которая возвращяет таблицу содержащую $id$
+и название жанра, год, количетсво продаж за указаный год
+и абсолютное и относительное изменение продаж,
+относительно прошлого года. 
+
+\lstinputlisting{../sql/task1.sql}
+
+В первую очередь была получена таблица $genre\_date\_count$,
+содержащая информацию, о жанрах и продажах с приведением года.
+Дале была получена таблица $sold\_by\_year$,
+отличающаяся от таблицы $genre\_date\_count$ тем,
+что теперь вычислется количество проданного за год 
+и отсекается ненужная информация о других жанрах.
+Далее вычисляются относительное и абсолютное изменение
+и добавляются в выходную таблицу.
+
+Были проведены замеры времени исполнения:
+\begin{enumerate}
+	\item 443,691 ms
+	\item 446,705 ms
+	\item 458,722 ms
+	\item 466,951 ms
+	\item 465,569 ms
+\end{enumerate}
+
+\subsection{Первые продажи и комментарии заданного автора}
+Был разработан скрипт, содержащий функцию выполняющую поставленную задачу.
+
+\lstinputlisting{../sql/task2.sql}
+
+Идея заключается в том, что мы сначла формируем таблицу с продажами, потом с комментариями, потом объединяем их, добавляем ограничение на дату и вычисляем изменение относительно прошлого месяца.
+
+Были проведены замеры времени исполнения:
+\begin{enumerate}
+	\item 69,077 ms
+	\item 73,835 ms
+	\item 78,388 ms
+	\item 71,851 ms
+	\item 71,154 ms
+\end{enumerate}
+
+
+\section{Вывод}
+В ходе лабораторной работы были улучшены навыки работы с sql и получены навыки разработки хранимых функций. Хранимые функции не могу изменять данные и должны возвращать значение.
+
+Вызов функции осуществляется там, где требуется выражение, формирующее значение. В связи с этим, функции могут непосредственно использоваться в выражениях. Эти качества позволяют в значительной степени расширить функциональные возможности языка SQL, как средства разработки приложений. 
+
+\end{document}
